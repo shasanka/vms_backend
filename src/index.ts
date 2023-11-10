@@ -1,6 +1,7 @@
 import express from "express";
 import authRoute from "./routes/auth/auth";
 import testRoute from "./routes/private/testRoute";
+import visitorRoute from "./routes/private/visitorRoute";
 
 import dotenv from "dotenv";
 import cors from "cors";
@@ -19,27 +20,11 @@ connectToDatabase().then(() => {
 
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/test", testRoute);
+app.use("/api/v1/visitor", visitorRoute);
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
-// async function startServer() {
-//   try {
-//     await connectToDatabase();
-//     await initial();
-
-//     app.use('/api/v1/auth', authRoute);
-//     app.use('/api/v1/test',testRoute)
-
-//     app.listen(port, () => {
-//       console.log(`Server running at http://localhost:${port}`);
-//     });
-
-//     return app; // Return the app instance
-//   } catch (error) {
-//     console.error('Error starting the server:', error);
-//   }
-// }
 
 async function initial() {
   try {

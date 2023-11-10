@@ -15,7 +15,7 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
 
     // Check if bearer[1] exists
     if (bearer.length < 2 || !bearer[1]) {
-      return res.status(401).json({ message: "Invalid token format" });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const bearerToken = bearer[1];
@@ -26,7 +26,7 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
       process.env.SECRET_PRIVATE_ACCESS_KEY!,
       (err, decoded) => {
         if (err) {
-          return res.status(401).json({ message: "Invalid token" });
+          return res.status(401).json({ message: "Unauthorized" });
         }
         const decodedPayload = decoded as JwtPayload;
         // If the token is valid, you can access the decoded information in `decoded`
@@ -36,7 +36,7 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
       }
     );
   } else {
-    return res.status(401).json({ message: "Auth header not provided" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 };
 
