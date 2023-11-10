@@ -13,7 +13,6 @@ app.use(cors())
 app.use(express.json())
 const port = process.env.PORT || 3000;
 
-
 async function startServer() {
   try {
     await connectToDatabase();
@@ -25,6 +24,8 @@ async function startServer() {
     app.listen(port, () => {
       console.log(`Server running at http://localhost:${port}`);
     });
+
+    return app; // Return the app instance
   } catch (error) {
     console.error('Error starting the server:', error);
   }
@@ -44,4 +45,5 @@ async function initial() {
   }
 }
 
-startServer();
+// Export the startServer function
+export { startServer };

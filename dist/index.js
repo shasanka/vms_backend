@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.startServer = void 0;
 const express_1 = __importDefault(require("express"));
 const auth_1 = __importDefault(require("./routes/auth/auth"));
 const testRoute_1 = __importDefault(require("./routes/private/testRoute"));
@@ -24,11 +25,13 @@ async function startServer() {
         app.listen(port, () => {
             console.log(`Server running at http://localhost:${port}`);
         });
+        return app; // Return the app instance
     }
     catch (error) {
         console.error('Error starting the server:', error);
     }
 }
+exports.startServer = startServer;
 async function initial() {
     try {
         const documentCount = await role_1.default.estimatedDocumentCount();
@@ -43,4 +46,3 @@ async function initial() {
         throw new Error('Error initializing roles');
     }
 }
-startServer();
