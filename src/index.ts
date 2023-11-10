@@ -59,3 +59,4 @@ async function initial() {
 // startServer()
 
 // export {startServer}
+export default app

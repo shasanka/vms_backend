@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.ts",
+    "start": "nodemon src/index.ts", 
     "build": "tsc",
-    "serve": "node dist/index.js"
+    "vercel-build":"echo hello"
   },
   "keywords": [],
   "author": "",
