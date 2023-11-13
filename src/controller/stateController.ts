@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { StateModel } from "../models/state";
+import { saveStates } from "./stateDataEntry";
 
 const getStates = async (req: Request, res: Response) => {
   try {
@@ -30,9 +31,24 @@ const getDistricts = async (req: Request, res: Response) => {
   }
 };
 
+const addStatesData = async (req: Request, res: Response) => {
+  try {
+    const stateCount = await StateModel.estimatedDocumentCount();
+    if (stateCount === 0) {
+      await saveStates();
+      return res.status(200).json({ message: "All states added successfully" });
+    }else{
+        return res.status(200).json({ message: "States are already updated" });
+    }
+  } catch (e) {
+    return res.status(500).json({ message: "Error in state addition" });
+  }
+};
+
 const stateController = {
   getStates,
   getDistricts,
+  addStatesData,
 };
 
 export default stateController;

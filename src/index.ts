@@ -5,8 +5,6 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectToDatabase from "./controller/db";
 import RoleModel from "./models/role";
-import { StateModel } from "./models/state";
-import { saveStates } from "./controller/stateDataEntry";
 dotenv.config();
 
 const app = express();
@@ -32,10 +30,7 @@ async function initial() {
       await RoleModel.create({ name: "admin" });
       await RoleModel.create({ name: "moderator" });
     }
-    const stateCount = await StateModel.estimatedDocumentCount();
-    if(stateCount === 0){
-      await saveStates()
-    }
+  
   } catch (error) {
     console.error("Error initializing roles:", error);
     throw new Error("Error initializing roles");
