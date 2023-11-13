@@ -48,7 +48,7 @@ const visitorSchema = new mongoose.Schema<Visitor>(
     },
     idProofType: {
       type: Number,
-      enum: Object.values(IDProofType),
+      enum: IDProofType,
       default: IDProofType.DRIVING_LICENSE,
     },
     idProofNumber: {

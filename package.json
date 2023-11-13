@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.ts", 
+    "start": "nodemon --exec ts-node src/index.ts --env PORT=3001",
+
     "build": "tsc",
     "vercel-build":"echo hello"
   },
