@@ -3,7 +3,7 @@ import stateController from '../../controller/stateController';
 
 const router = express.Router();
 
-
+router.post('/', stateController.addStatesData)
 router.get("/",stateController.getStates)
 router.get("/:stateId",stateController.getDistricts)
 
