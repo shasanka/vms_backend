@@ -1,45 +1,28 @@
 import express from "express";
-import authRoute from "./routes/auth/auth";
-import testRoute from "./routes/private/testRoute";
+import indexRoute from "./routes/index";
 
 import dotenv from "dotenv";
 import cors from "cors";
 import connectToDatabase from "./controller/db";
 import RoleModel from "./models/role";
+import { StateModel } from "./models/state";
+import { saveStates } from "./controller/stateDataEntry";
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 connectToDatabase().then(() => {
   initial();
 });
 
-app.use("/api/v1/auth", authRoute);
-app.use("/api/v1/test", testRoute);
+app.use("/api/v1", indexRoute);
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
-// async function startServer() {
-//   try {
-//     await connectToDatabase();
-//     await initial();
-
-//     app.use('/api/v1/auth', authRoute);
-//     app.use('/api/v1/test',testRoute)
-
-//     app.listen(port, () => {
-//       console.log(`Server running at http://localhost:${port}`);
-//     });
-
-//     return app; // Return the app instance
-//   } catch (error) {
-//     console.error('Error starting the server:', error);
-//   }
-// }
 
 async function initial() {
   try {
@@ -48,6 +31,10 @@ async function initial() {
       await RoleModel.create({ name: "user" });
       await RoleModel.create({ name: "admin" });
       await RoleModel.create({ name: "moderator" });
+    }
+    const stateCount = await StateModel.estimatedDocumentCount();
+    if(stateCount === 0){
+      await saveStates()
     }
   } catch (error) {
     console.error("Error initializing roles:", error);
