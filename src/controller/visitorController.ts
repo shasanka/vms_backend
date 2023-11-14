@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import VisitorModel, { Visitor } from "../models/visitor";
 import mongoose from "mongoose";
-import { saveStates, transformedData } from "./stateDataEntry";
 
 // POST
 const addVisitor = async (req: Request, res: Response) => {
@@ -19,11 +18,6 @@ const addVisitor = async (req: Request, res: Response) => {
 
     const visitor = await VisitorModel.create(visitorData);
 
-    console.log(
-      "🚀 ~ file: visitorController.ts:10 ~ addVisitor ~ visitor:",
-      visitor
-    );
-
     if (visitor) {
       return res.status(201).json({ message: "Visitor created" });
     } else {
@@ -38,12 +32,29 @@ const addVisitor = async (req: Request, res: Response) => {
 
 //GET
 const getVisitor = async (req: Request, res: Response) => {
-
   try {
     const visitors = await VisitorModel.find({});
 
     if (visitors.length > 0) {
       return res.status(200).json({ message: "All visitors", data: visitors });
+    } else {
+      return res.status(404).json({ message: "No visitors found" });
+    }
+  } catch (error) {
+    console.error("Error getting visitors:", error);
+
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+//GET VISITOR WITH PHONE NUMBER
+const getVisitorWithPhoneNo = async (req: Request, res: Response) => {
+  const phoneNumber = req.params.phonenumber;
+  if (!phoneNumber) return res.status(400).json({ message: "Bad request" });
+  try {
+    const visitors = await VisitorModel.find({ phoneNumber });
+
+    if (visitors.length > 0) {
+      return res.status(200).json({ message: "Single visitor", data: visitors });
     } else {
       return res.status(404).json({ message: "No visitors found" });
     }
@@ -121,5 +132,6 @@ const visitorController = {
   getVisitor,
   updateVisitor,
   deleteVisitor,
+  getVisitorWithPhoneNo,
 };
 export default visitorController;

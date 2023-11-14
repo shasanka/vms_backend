@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use(authJwt.verifyToken);
 router.get("/", visitorController.getVisitor);
+router.get("/:phonenumber", visitorController.getVisitorWithPhoneNo);
 router.post("/", visitorController.addVisitor);
 router.put("/", visitorController.updateVisitor);
 router.delete("/", visitorController.deleteVisitor);
