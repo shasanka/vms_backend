@@ -4,7 +4,8 @@ import EntryModel from "../models/entry";
 const getEntry = (req: Request, res: Response) => {};
 
 const addEntry = async(req: Request, res: Response) => {
-  const visitorId = req.query.visitorId;
+    console.log("🚀 ~ file: entryController.ts:8 ~ addEntry ~ req.body:", req.body)
+  const visitorId = req.body.visitorId;
   if (!visitorId)
     return res.status(400).json({ message: "Bad request in entry" });
   try {
