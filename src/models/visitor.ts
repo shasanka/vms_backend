@@ -26,9 +26,11 @@ const visitorSchema = new mongoose.Schema<Visitor>(
     phoneNumber: {
       type: Number,
       required: true,
+      unique:true
     },
     email: {
       type: String,
+      unique:true
     },
     address: {
       type: String,
