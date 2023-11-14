@@ -3,7 +3,6 @@ import { EEntryStatus } from "../enum/ECommon";
 
 export interface IEntry extends mongoose.Document {
   visitorId: mongoose.Schema.Types.ObjectId;
-//   registrationTimestamp: Date;
   checkinTimestamp: Date;
   checkoutTimestamp: Date;
   status: EEntryStatus;
@@ -16,11 +15,6 @@ const entrySchema = new mongoose.Schema<IEntry>(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Visitor",
     },
-    // registrationTimestamp: {
-    //   type: Date,
-    //   default: Date.now(),
-    //   immutable: true,
-    // },
     checkinTimestamp: {
       type: Date,
     },
