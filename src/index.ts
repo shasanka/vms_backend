@@ -26,9 +26,10 @@ async function initial() {
   try {
     const documentCount = await RoleModel.estimatedDocumentCount();
     if (documentCount === 0) {
-      await RoleModel.create({ name: "user" });
+      await RoleModel.create({ name: "reception" });
+      await RoleModel.create({ name: "security" });
+      await RoleModel.create({ name: "office" });
       await RoleModel.create({ name: "admin" });
-      await RoleModel.create({ name: "moderator" });
     }
   
   } catch (error) {
