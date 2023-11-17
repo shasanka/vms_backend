@@ -1,7 +1,21 @@
 import { Request, Response } from "express";
 import EntryModel from "../models/entry";
 
-const getEntry = (req: Request, res: Response) => {};
+const getEntry = async (req: Request, res: Response) => {
+  try {
+    const entries = await EntryModel.find({});
+    if (entries) {
+      return res.status(200).json({ data: entries });
+    } else {
+      return res.status(200).json({ message: [] });
+    }
+  } catch (e) {
+    console.log("Error in get entry :", e);
+    return res.status(500).json({
+      message: "Server error",
+    });
+  }
+};
 
 const getSingleEntry = async (req: Request, res: Response) => {
   console.log(
@@ -16,7 +30,7 @@ const getSingleEntry = async (req: Request, res: Response) => {
     if (entries.length > 0) {
       return res.status(200).json({ message: "Entries found", data: entries });
     } else {
-      return res.status(200).json({ message: "Resource not found",data:[] });
+      return res.status(200).json({ message: "Resource not found", data: [] });
     }
   } catch (e) {
     console.log(e);
