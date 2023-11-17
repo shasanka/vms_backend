@@ -4,7 +4,7 @@ export interface User {
   username: string;
   email: string;
   password: string;
-  roles: mongoose.Schema.Types.ObjectId[] | Role[]; // Assuming roles can be either ObjectId or populated RoleDocument
+  role: mongoose.Schema.Types.ObjectId | Role; // Assuming roles can be either ObjectId or populated RoleDocument
 }
 
 // Define the User schema
@@ -22,12 +22,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  roles: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Role",
-    },
-  ],
+  role: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Role",
+  },
 });
 
 // Create the User model using the schema

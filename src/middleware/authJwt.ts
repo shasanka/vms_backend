@@ -58,7 +58,7 @@ const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
     try {
       // Find roles associated with the user
       const roles = await RoleModel.find({
-        _id: { $in: user.roles },
+        _id: { $in: user.role },
       });
 
       // Check if user has the admin role
@@ -101,7 +101,7 @@ const isModerator = async (req: Request, res: Response, next: NextFunction) => {
 
     // Find roles associated with the user
     const roles = await RoleModel.find({
-      _id: { $in: user.roles },
+      _id: { $in: user.role },
     });
 
     // Check if user has the moderator role

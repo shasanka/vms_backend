@@ -34,26 +34,27 @@ const checkRolesExisted = async (
   next: NextFunction
 ) => {
   if (req.body.roles) {
+    const rolesArray = Array.isArray(req.body.roles) ? req.body.roles : [req.body.roles];
+    console.log("🚀 ~ file: verifySignup.ts:37 ~ rolesArray:", rolesArray);
+
     try {
       const existingRoles = await RoleModel.find({
-        name: { $in: req.body.roles },
+        name: { $in: rolesArray },
       });
 
-      const nonExistingRoles = req.body.roles.filter(
-        (role:string) =>
+      const nonExistingRoles = rolesArray.filter(
+        (role: string) =>
           !existingRoles.some((existingRole) => existingRole.name === role)
       );
 
       if (nonExistingRoles.length > 0) {
-       return res.status(400).json({
+        return res.status(400).json({
           message: `Failed! Roles ${nonExistingRoles.join(", ")} do not exist!`,
         });
-      
       }
     } catch (error) {
       console.error("Error checking roles:", error);
       return res.status(500).json({ error: "Internal Server Error" });
-     
     }
   }
 
