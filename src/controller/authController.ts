@@ -7,10 +7,11 @@ import RoleModel, { Role } from "../models/role";
 
 const signIn = async (req: Request, res: Response) => {
   try {
-    const user = await UserModel.findOne({ email: req.body.email }).populate<{ roles: Role[] }>(
-      "roles"
-    );
-
+    const user = await UserModel.findOne({ email: req.body.email }).populate<{
+      role: Role;
+    }>("role");
+    
+    console.log("🚀 ~ file: authController.ts:11 ~ user ~ user:", user)
     if (!user) {
       return res.status(404).json({ message: "Invalid username or password!" });
     }
@@ -33,15 +34,13 @@ const signIn = async (req: Request, res: Response) => {
       }
     );
 
-    const authorities = (user.roles).map(
-      (role) => `ROLE_${role.name.toUpperCase()}`
-    );
+    const authorities = user.role ? `ROLE_${user.role.name.toUpperCase()}` : 'ROLE_USER';
 
     res.status(200).json({
       id: user._id,
       username: user.username,
       email: user.email,
-      roles: authorities,
+      role: authorities,
       accessToken: token,
     });
   } catch (error) {
@@ -56,7 +55,7 @@ const signOut = (req: Request, response: Response) => {
 
 const signUp = async (req: Request, res: Response) => {
   try {
-    const { username, email, password, roles } = req.body;
+    const { username, email, password, role } = req.body;
 
     const hashedPassword = bcrypt.hashSync(password, 10);
 
@@ -66,19 +65,19 @@ const signUp = async (req: Request, res: Response) => {
       password: hashedPassword,
     });
 
-    if (roles && roles.length > 0) {
-      const rolesFound = await RoleModel.find({ name: { $in: roles } });
+    if (role) {
+      const roleFound = await RoleModel.find({ name: { $in: role } });
 
-      if (!rolesFound || rolesFound.length !== roles.length) {
+      if (!roleFound ) {
         throw new Error("Not all roles could be retrieved or do not exist.");
       }
 
-      user.roles = rolesFound.map((role) => role._id);
+      user.role = roleFound[0]._id;
     } else {
       const defaultRole = await RoleModel.findOne({ name: "user" });
 
       if (defaultRole) {
-        user.roles = [defaultRole._id];
+        user.role = defaultRole._id;
       }
     }
 
