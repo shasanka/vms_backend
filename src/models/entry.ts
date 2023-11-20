@@ -6,6 +6,8 @@ export interface IEntry extends mongoose.Document {
   checkinTimestamp: Date;
   checkoutTimestamp: Date;
   status: EEntryStatus;
+  whomToMeet:string;
+  department:string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -26,6 +28,14 @@ const entrySchema = new mongoose.Schema<IEntry>(
       enum: EEntryStatus,
       default: 1,
     },
+    whomToMeet:{
+      type:String,
+      required:true
+    },
+    department:{
+      type:String,
+      required:true
+    }
   },
   {
         timestamps: { createdAt: true, updatedAt: false },

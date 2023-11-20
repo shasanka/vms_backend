@@ -9,11 +9,6 @@ const addVisitor = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Invalid data" });
     }
 
-    console.log(
-      "🚀 ~ file: visitorController.ts:7 ~ addVisitor ~ req.body:",
-      req.body
-    );
-
     const visitorData = req.body;
 
     const visitor = await VisitorModel.create(visitorData);
@@ -23,10 +18,14 @@ const addVisitor = async (req: Request, res: Response) => {
     } else {
       return res.status(500).json({ message: "Unable to create visitor" });
     }
-  } catch (error) {
-    console.error("Error adding visitor:", error);
+  } catch (e: any) {
+    console.error("Error adding visitor:", e);
 
-    return res.status(500).json({ message: "Server error" });
+    if (e instanceof mongoose.Error) {
+      return res.status(500).json({ message: `MongoDB Error: ${e.message}` });
+    }
+
+    return res.status(500).json({ message: `Server error: ${e.message}` });
   }
 };
 
