@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import EntryModel from "../models/entry";
+import mongoose, { Error } from "mongoose";
 
 const getEntry = async (req: Request, res: Response) => {
   try {
@@ -22,15 +23,15 @@ const getSingleEntry = async (req: Request, res: Response) => {
     "🚀 ~ file: entryController.ts:9 ~ getSingleEntry ~ req.params:",
     req.params
   );
-  const visitorId = req.params.visitorId;
+  const entryId = req.params.entryId;
 
-  if (!visitorId) return res.status(400).json({ message: "Invalid query" });
+  if (!entryId) return res.status(400).json({ message: "Invalid query" });
   try {
-    const entries = await EntryModel.find({ visitorId });
-    if (entries.length > 0) {
-      return res.status(200).json({ message: "Entries found", data: entries });
+    const entry = await EntryModel.findById( entryId );
+    if (entry) {
+      return res.status(200).json({ message: "Entries found", data: entry });
     } else {
-      return res.status(200).json({ message: "Resource not found", data: [] });
+      return res.status(200).json({ message: "Resource not found", data: null });
     }
   } catch (e) {
     console.log(e);
@@ -41,12 +42,14 @@ const getSingleEntry = async (req: Request, res: Response) => {
 };
 
 const addEntry = async (req: Request, res: Response) => {
-  const visitorId = req.body.visitorId;
+  const { visitorId, whomToMeet, department } = req.body;
   if (!visitorId)
     return res.status(400).json({ message: "Bad request in entry" });
   try {
     const entry = await EntryModel.create({
       visitorId: visitorId,
+      whomToMeet,
+      department
     });
 
     if (entry) {
@@ -56,8 +59,11 @@ const addEntry = async (req: Request, res: Response) => {
         .status(401)
         .json({ message: "Unable to create entry", data: [] });
   } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: "Server error" });
+    // console.log(e.message);
+    if (e instanceof mongoose.Error) {
+      res.statusMessage = e.message
+      return res.status(500).end();
+    }
   }
 };
 
