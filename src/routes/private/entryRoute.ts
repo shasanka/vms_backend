@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get("/", entryController.getEntry);
 router.post("/", entryController.addEntry);
-router.get("/:visitorId", entryController.getSingleEntry);
+router.get("/:entryId", entryController.getSingleEntry);
 
 export default router;

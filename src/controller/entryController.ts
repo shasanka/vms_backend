@@ -23,15 +23,15 @@ const getSingleEntry = async (req: Request, res: Response) => {
     "🚀 ~ file: entryController.ts:9 ~ getSingleEntry ~ req.params:",
     req.params
   );
-  const visitorId = req.params.visitorId;
+  const entryId = req.params.entryId;
 
-  if (!visitorId) return res.status(400).json({ message: "Invalid query" });
+  if (!entryId) return res.status(400).json({ message: "Invalid query" });
   try {
-    const entries = await EntryModel.find({ visitorId });
-    if (entries.length > 0) {
-      return res.status(200).json({ message: "Entries found", data: entries });
+    const entry = await EntryModel.findById( entryId );
+    if (entry) {
+      return res.status(200).json({ message: "Entries found", data: entry });
     } else {
-      return res.status(200).json({ message: "Resource not found", data: [] });
+      return res.status(200).json({ message: "Resource not found", data: null });
     }
   } catch (e) {
     console.log(e);
