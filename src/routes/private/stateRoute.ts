@@ -6,6 +6,6 @@ const router = express.Router();
 router.use(authJwt.verifyToken);
 router.post('/', stateController.addStatesData)
 router.get("/",stateController.getStates)
-router.get("/:stateId",stateController.getDistricts)
+router.get("/:stateName",stateController.getDistricts)
 
 export default router

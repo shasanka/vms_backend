@@ -20,10 +20,12 @@ const getStates = async (req: Request, res: Response) => {
 };
 
 const getDistricts = async (req: Request, res: Response) => {
-  const stateId = req.params.stateId;
-  if (!stateId) return res.status(401).json({ message: "Invalid state id" });
+  console.log("🚀 ~ file: stateController.ts:24 ~ getDistricts ~ req.params.stateName:", req.params.stateName)
+  const stateName = req.params.stateName;
+  if (!stateName) return res.status(401).json({ message: "Invalid state id" });
   try {
-    const stateData = await StateModel.findById(stateId).populate("districts");
+    const stateData = await StateModel.findOne({name:stateName.toUpperCase()}).populate("districts");
+    console.log("🚀 ~ file: stateController.ts:28 ~ getDistricts ~ stateData:", stateData)
     if (!stateData) return res.status(401).json({ message: "State not found" });
     return res.status(200).json({ data: stateData });
   } catch (e) {
